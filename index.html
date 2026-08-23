@@ -370,7 +370,7 @@
         </div>
       </div>
     </div>
-    <div class="deadline-grid" id="longtermGrid"></div>
+    <div class="opportunity-grid" id="longtermGrid"></div>
   </section>
 </main>
 
@@ -588,15 +588,8 @@ function renderDeadline(){
 }
 
 function renderLongterm(){
-  const list = ALL.filter(a=> !endOf(a)).slice(0,4);
-  document.getElementById('longtermGrid').innerHTML = list.length ? list.map(a=>`
-    <a class="deadline-card" href="${esc(a.url)}" target="_blank" rel="noopener">
-      <img class="dl-icon" src="${asset(a.image)}" alt="" loading="lazy"/>
-      <div class="dl-body">
-        <h3>${esc(stripTitleMoney(a.title))}</h3>
-      </div>
-      <span class="deadline-badge longterm">长期开放</span>
-    </a>`).join('') : '<div class="empty-state">暂无长期有效的活动</div>';
+  const list = ALL.filter(a=> !endOf(a));
+  document.getElementById('longtermGrid').innerHTML = list.length ? list.map(oppCard).join('') : '<div class="empty-state">暂无长期有效的活动</div>';
 }
 
 function renderList(){

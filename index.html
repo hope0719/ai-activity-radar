@@ -164,6 +164,7 @@
   }
   .deadline-badge svg{width:14px;height:14px}
   .deadline-badge.urgent{color:#fff;background:#dd3d18;border-color:#dd3d18;box-shadow:0 2px 8px #dd3d1838}
+  .opportunity-card > .deadline-badge{top:108px;right:14px}
 
   /* ---------- Filter ribbon ---------- */
   .smart-filter-ribbon{
@@ -216,14 +217,18 @@
   .meta-line{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:9px;font-size:12.5px;color:#3a3d3a}
   .meta-line span{display:inline-flex;align-items:center;gap:5px}
   .meta-line svg{width:14px;height:14px;color:var(--muted)}
-  .score-line{display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;font-size:13px;letter-spacing:.02em}
+  .score-line{display:inline-flex;align-items:center;gap:7px;font-size:13px;letter-spacing:.02em}
   .score-line .score-label{font-size:12px;font-weight:720;color:#3a3d3a}
   .score-line .stars{display:inline-flex;gap:1px}
   .stars .filled{color:#d97706}
   .stars .empty{color:#d8d2c8}
-  .deadline-line{display:flex;align-items:center;gap:6px;margin-bottom:9px;font-size:12.5px;color:#3a3d3a;font-weight:600}
+  .meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:9px}
+  .meta-row .deadline-line{margin-bottom:0}
+  .deadline-line{display:inline-flex;align-items:center;gap:6px;margin-bottom:9px;font-size:12.5px;color:#3a3d3a;font-weight:600}
   .deadline-line svg{width:14px;height:14px;color:var(--teal)}
   .deadline-line .long-term{color:var(--muted);font-weight:540}
+  .score-diff-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-bottom:9px}
+  .score-diff-row .diff-line{margin-bottom:0}
   .summary{color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:11px;
     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .reward-box{
@@ -484,19 +489,16 @@ function oppCard(a){
       <div class="card-main">
         <h3>${esc(a.title)}</h3>
         ${meta ? `<p class="vendor-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>${meta}</p>` : ''}
-        <div class="deadline-line">${endOf(a) ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>${esc(fmtDate(a))} 截止</span>` : '<span class="long-term">长期开放</span>'}</div>
-        <div class="score-line"><span class="score-label">推荐</span>${stars(a.score)}</div>
-        ${diffLine}
-        ${badges}
-        ${chips}
+        <div class="meta-row">${endOf(a) ? `<span class="deadline-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>${esc(fmtDate(a))} 截止</span>` : `<span class="deadline-line long-term">长期开放</span>`}${off}${sug}${chips}</div>
+        <div class="score-diff-row"><span class="score-line"><span class="score-label">推荐</span>${stars(a.score)}</span>${diffLine}</div>
         ${a.reward ? `<div class="reward-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 15 9l7 .5-5.5 4.5L18 21l-6-4-6 4 1.5-7L2 9.5 9 9z"/></svg><div class="reward-content"><b>${esc(a.reward)}</b>${detail ? `<small>${esc(detail)}</small>` : ''}</div></div>` : ''}
         ${sum ? `<p class="summary">${esc(sum)}</p>` : ''}
       </div>
       <div class="card-footer">
         <span class="type-tag">${esc(a.type || '其他')}</span>
-        ${deadlineBadge(a)}
       </div>
     </div>
+    ${deadlineBadge(a)}
   </a>`;
 }
 

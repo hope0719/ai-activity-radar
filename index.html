@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 活动雷达 — 在时间截止前找到 AI 机会</title>
+<meta name="description" content="发现值得参加的 AI 活动、编程挑战、黑客松、积分和权益机会。在时间截止前找到 AI 机会。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+<style>
+  :root {
+    --bg: #faf9f7;
+    --card: #ffffff;
+    --border: #ececec;
+    --text: #1f2328;
+    --text-dim: #6b7280;
+    --accent: #2f6fed;
+    --accent-soft: #eaf1ff;
+    --orange-bg: #feead2;  --orange-fg: #b26206;
+    --purple-bg: #ece2fe;  --purple-fg: #6425d0;
+    --green-bg: #f0f8d4;   --green-fg: #5c7a00;
+    --red-bg: #fde2e2;     --red-fg: #c7000b;
+    --pink-bg: #fce4f2;    --pink-fg: #b82879;
+    --blue-bg: #e3f0fd;    --blue-fg: #1a5fa8;
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+  /* ===== Header ===== */
+  header.site-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,249,247,.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    display: flex; align-items: center; gap: 20px;
+    padding: 14px 0;
+    max-width: 1040px; margin: 0 auto; padding: 14px 20px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.15rem; white-space: nowrap; }
+  .brand .logo { font-size: 1.4rem; }
+  .brand small { display: block; font-size: .68rem; color: var(--text-dim); font-weight: 500; letter-spacing: .02em; }
+  .search-box {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 8px 14px;
+  }
+  .search-box svg { color: var(--text-dim); flex-shrink: 0; }
+  .search-box input {
+    border: none; outline: none; background: transparent;
+    font-size: .95rem; width: 100%; color: var(--text);
+  }
+  .nav-stats { font-size: .8rem; color: var(--text-dim); white-space: nowrap; }
+  .nav-stats b { color: var(--accent); }
+
+  /* ===== Hero / Closing soon ===== */
+  .hero { padding: 36px 0 8px; }
+  .hero h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; }
+  .hero h1 span { color: var(--accent); }
+  .hero .sub { color: var(--text-dim); font-size: .95rem; margin-bottom: 20px; }
+  .closing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .closing-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    box-shadow: var(--shadow);
+    transition: transform .15s, box-shadow .15s;
+    cursor: pointer; text-decoration: none; color: inherit;
+  }
+  .closing-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.1); }
+  .closing-card .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .closing-card .icon { font-size: 1.6rem; }
+  .closing-card h3 { font-size: 1rem; font-weight: 700; line-height: 1.4; flex: 1; }
+  .closing-card .badge-deadline {
+    font-size: .78rem; font-weight: 700; padding: 4px 10px; border-radius: 8px;
+    background: var(--red-bg); color: var(--red-fg); white-space: nowrap;
+  }
+  .closing-card .badge-deadline.soon { background: var(--orange-bg); color: var(--orange-fg); }
+  .closing-card .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .closing-card .reward { font-size: .82rem; color: var(--text-dim); }
+  .closing-card .reward b { color: var(--text); }
+
+  /* ===== Section header ===== */
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; margin: 40px 0 16px; flex-wrap: wrap;
+  }
+  .section-head h2 { font-size: 1.35rem; font-weight: 800; }
+  .section-head .count { color: var(--text-dim); font-size: .9rem; }
+  .section-head .count b { color: var(--accent); }
+
+  /* ===== Filters ===== */
+  .filters {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    margin-bottom: 20px;
+  }
+  .chip {
+    padding: 6px 14px; border-radius: 20px; font-size: .82rem;
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text-dim); cursor: pointer; transition: all .15s;
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .filters .divider { width: 1px; height: 20px; background: var(--border); }
+  select.sort {
+    padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--card); font-size: .82rem; color: var(--text); outline: none;
+  }
+
+  /* ===== Opportunity list ===== */
+  .opportunity-grid { display: grid; gap: 12px; }
+  .opportunity-card {
+    display: flex; gap: 16px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+    text-decoration: none; color: inherit; box-shadow: var(--shadow);
+    transition: border-color .15s, transform .15s;
+  }
+  .opportunity-card:hover { border-color: var(--accent); transform: translateX(3px); }
+  .card-media {
+    width: 72px; height: 72px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; background: var(--accent-soft);
+    overflow: hidden;
+  }
+  .card-media img { width: 100%; height: 100%; object-fit: cover; }
+  .card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .card-main h3 { font-size: 1.02rem; font-weight: 700; line-height: 1.4; }
+  .vendor-line { font-size: .8rem; color: var(--text-dim); }
+  .vendor-line b { color: var(--accent); font-weight: 600; }
+  .meta-line { display: flex; flex-wrap: wrap; gap: 14px; font-size: .8rem; color: var(--text-dim); }
+  .meta-line span { display: inline-flex; align-items: center; gap: 5px; }
+  .meta-line svg { width: 14px; height: 14px; color: var(--text-dim); }
+  .score-line { display: flex; align-items: center; gap: 4px; font-size: .82rem; }
+  .score-line .score-label { color: var(--text-dim); margin-right: 4px; }
+  .score-line .star { color: #d9d9d9; }
+  .score-line .star.filled { color: #f5a623; }
+  .summary { font-size: .84rem; color: var(--text-dim); }
+  .reward-box {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: .85rem;
+  }
+  .reward-box b { font-weight: 700; }
+  .reward-box small {
+    font-size: .72rem; padding: 3px 8px; border-radius: 6px;
+    background: var(--accent-soft); color: var(--accent); white-space: nowrap;
+  }
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    margin-top: 2px;
+  }
+  .type-tag {
+    font-size: .76rem; padding: 3px 10px; border-radius: 6px; font-weight: 600;
+  }
+  .deadline-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: .78rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 8px;
+    background: var(--orange-bg); color: var(--orange-fg); white-space: nowrap;
+  }
+  .deadline-badge.urgent { background: var(--red-bg); color: var(--red-fg); }
+  .deadline-badge.overdue { background: #eee; color: #999; text-decoration: line-through; }
+  .deadline-badge.open { background: var(--green-bg); color: var(--green-fg); }
+
+  /* 类型配色 */
+  .t-开发挑战 { background: var(--orange-bg); color: var(--orange-fg); }
+  .t-黑客松 { background: var(--purple-bg); color: var(--purple-fg); }
+  .t-AI竞赛 { background: var(--blue-bg); color: var(--blue-fg); }
+  .t-AI 竞赛 { background: var(--blue-bg); color: var(--blue-fg); }
+  .t-权益福利 { background: var(--pink-bg); color: var(--pink-fg); }
+  .t-开发激励 { background: var(--green-bg); color: var(--green-fg); }
+  .t-内容创作 { background: var(--purple-bg); color: var(--purple-fg); }
+
+  .empty-state {
+    text-align: center; padding: 60px 20px; color: var(--text-dim);
+    background: var(--card); border: 1px dashed var(--border); border-radius: var(--radius);
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    margin-top: 60px; padding: 32px 0; border-top: 1px solid var(--border);
+    color: var(--text-dim); font-size: .8rem; text-align: center;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .nav-inner { flex-wrap: wrap; }
+    .search-box { order: 3; flex-basis: 100%; }
+    .opportunity-card { flex-direction: row; }
+    .card-media { width: 52px; height: 52px; font-size: 1.5rem; }
+    .closing-card h3 { font-size: .92rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="./">
+      <span class="logo">📡</span>
+      <span>AI 活动雷达<small>在时间截止前找到 AI 机会</small></span>
+    </a>
+    <div class="search-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="搜索活动、主办方、奖金…">
+    </div>
+    <div class="nav-stats"><b id="totalCount">0</b> 个机会</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- 即将截止 -->
+  <section class="hero">
+    <h1>🔥 <span>即将截止</span></h1>
+    <p class="sub">错过报名 = 错过奖金。以下机会正在倒计时，抓紧行动。</p>
+    <div class="closing-grid" id="closingGrid"></div>
+  </section>
+
+  <!-- 全部机会 -->
+  <section>
+    <div class="section-head">
+      <h2>📋 全部机会</h2>
+      <span class="count">共 <b id="listCount">0</b> 条结果</span>
+    </div>
+
+    <div class="filters">
+      <span class="chip active" data-type="all">全部</span>
+      <span class="chip" data-type="黑客松">黑客松</span>
+      <span class="chip" data-type="开发挑战">开发挑战</span>
+      <span class="chip" data-type="AI 竞赛">AI 竞赛</span>
+      <span class="chip" data-type="开发激励">开发激励</span>
+      <span class="chip" data-type="权益福利">权益福利</span>
+      <span class="chip" data-type="内容创作">内容创作</span>
+      <span class="divider"></span>
+      <span class="chip" data-region="全球">🌍 全球</span>
+      <span class="chip" data-region="中国">🇨🇳 中国</span>
+      <span class="chip" data-region="北美">🇺🇸 北美</span>
+      <span class="chip" data-region="欧洲">🇪🇺 欧洲</span>
+      <span class="divider"></span>
+      <select class="sort" id="sortSelect">
+        <option value="deadline">按截止日期（近 → 远）</option>
+        <option value="score">按推荐指数</option>
+        <option value="reward">按奖金池</option>
+      </select>
+    </div>
+
+    <div class="opportunity-grid" id="opportunityGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      😕 没有符合条件的机会，换个筛选试试
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>📡 AI 活动雷达 · 数据抓取自公开来源，仅供学习参考 · 更新于 <span id="updatedAt">-</span></p>
+    <p style="margin-top:6px; font-size:.75rem;">参加活动前请以活动主办方官方页面为准 · <a href="https://airadar.laifuyou.com/zh" target="_blank" rel="noopener">原始数据参考</a></p>
+  </div>
+</footer>
+
+<script>
+const TYPE_COLORS = {
+  '开发挑战': 't-开发挑战', '黑客松': 't-黑客松', 'AI 竞赛': 't-AI竞赛',
+  'AI竞赛': 't-AI竞赛', '权益福利': 't-权益福利', '开发激励': 't-开发激励',
+  '内容创作': 't-内容创作'
+};
+const REGION_ICON = { '全球': '🌍', '中国': '🇨🇳', '北美': '🇺🇸', '欧洲': '🇪🇺', '日本': '🇯🇵', '线上': '💻', '亚洲': '🌏' };
+
+let allActivities = [];
+let activeType = 'all';
+let activeRegion = 'all';
+
+async function loadData() {
+  try {
+    const res = await fetch('data.json');
+    const data = await res.json();
+    allActivities = data.activities;
+    document.getElementById('updatedAt').textContent = (data.updated_at || '').replace('T', ' ').slice(0, 16);
+    render();
+  } catch (e) {
+    document.getElementById('opportunityGrid').innerHTML =
+      '<div class="empty-state">数据加载失败，请确认 data.json 存在</div>';
+  }
+}
+
+function calcDeadline(a) {
+  const now = new Date();
+  if (a.deadline_date) {
+    const d = new Date(a.deadline_date + 'T23:59:59+08:00');
+    const days = Math.ceil((d - now) / 86400000);
+    if (days < 0) return { cls: 'overdue', text: '已过期' };
+    if (days === 0) return { cls: 'urgent', text: '今天截止' };
+    if (days <= 7) return { cls: 'urgent', text: days + ' 天截止' };
+    return { cls: 'soon', text: days + ' 天截止' };
+  }
+  if (a.deadline_text === '长期开放') return { cls: 'open', text: '长期开放' };
+  if (a.deadline_text && a.deadline_text.includes('已过期')) return { cls: 'overdue', text: '已过期' };
+  return { cls: 'open', text: a.deadline_text || '长期开放' };
+}
+
+function stars(a) {
+  let s = '';
+  for (let i = 0; i < 5; i++) {
+    s += `<span class="star ${i < a.score ? 'filled' : ''}">★</span>`;
+  }
+  return s;
+}
+
+function renderClosing() {
+  const grid = document.getElementById('closingGrid');
+  const closing = allActivities
+    .map(a => ({ a, d: calcDeadline(a) }))
+    .filter(x => x.d.cls === 'urgent' || x.d.cls === 'soon')
+    .sort((x, y) => (x.a.deadline_date || '9999').localeCompare(y.a.deadline_date || '9999'))
+    .slice(0, 4);
+  grid.innerHTML = closing.map(({ a, d }) => `
+    <a class="closing-card" href="${a.url}" target="_blank" rel="noopener">
+      <div class="top">
+        <div class="icon">${a.image ? '' : '🎯'}</div>
+        <span class="badge-deadline ${d.cls}">${d.text}</span>
+      </div>
+      <h3>${a.title}</h3>
+      <div class="tags">
+        <span class="type-tag ${TYPE_COLORS[a.type] || ''}">${a.type || ''}</span>
+        <span class="type-tag" style="background:var(--blue-bg);color:var(--blue-fg);">${REGION_ICON[a.region] || ''} ${a.region || ''}</span>
+      </div>
+      <div class="reward"><b>${a.reward || ''}</b></div>
+    </a>
+  `).join('');
+}
+
+function filtered() {
+  return allActivities.filter(a => {
+    const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+    const matchType = activeType === 'all' || a.type === activeType;
+    const matchRegion = activeRegion === 'all' || a.region === activeRegion;
+    const matchSearch = !q || (a.title + (a.vendor || '') + (a.reward || '')).toLowerCase().includes(q);
+    return matchType && matchRegion && matchSearch;
+  });
+}
+
+function renderList() {
+  let list = filtered();
+  const sort = document.getElementById('sortSelect').value;
+  if (sort === 'deadline') {
+    list.sort((a, b) => (a.deadline_date || '9999').localeCompare(b.deadline_date || '9999'));
+  } else if (sort === 'score') {
+    list.sort((a, b) => b.score - a.score);
+  } else if (sort === 'reward') {
+    const rv = t => {
+      const m = String(t || '').match(/(\d+(?:\.\d+)?)\s*(万|K|k)/);
+      if (!m) return 0;
+      return parseFloat(m[1]) * (m[2] === '万' ? 10000 : 1000);
+    };
+    list.sort((a, b) => rv(b.reward) - rv(a.reward));
+  }
+  document.getElementById('listCount').textContent = list.length;
+  document.getElementById('totalCount').textContent = allActivities.length;
+  document.getElementById('emptyState').style.display = list.length ? 'none' : 'block';
+  const grid = document.getElementById('opportunityGrid');
+  grid.innerHTML = list.map(a => {
+    const d = calcDeadline(a);
+    return `
+    <a class="opportunity-card" href="${a.url}" target="_blank" rel="noopener">
+      <div class="card-media">
+        ${a.image ? `<img src="assets/${a.image}" alt="">` : '🎯'}
+      </div>
+      <div class="card-body">
+        <div class="card-main">
+          <h3>${a.title}</h3>
+          <p class="vendor-line">主办：<b>${a.vendor || '—'}</b></p>
+          <div class="meta-line">
+            <span>${REGION_ICON[a.region] || '📍'} ${a.region || '—'}</span>
+            <span>🗓 ${a.date_text || '长期开放'}</span>
+            <span>⏱ ${a.duration || '—'}</span>
+          </div>
+          <div class="score-line"><span class="score-label">推荐指数</span>${stars(a)}</div>
+          <p class="summary">${a.summary || ''}</p>
+          <div class="reward-box">
+            <b>💰 ${a.reward || ''}</b>
+            ${a.source ? `<small>来源：${a.source}</small>` : ''}
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="type-tag ${TYPE_COLORS[a.type] || ''}">${a.type || ''}</span>
+          <span class="deadline-badge ${d.cls}">⏰ ${d.text}</span>
+        </div>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+function render() {
+  renderClosing();
+  renderList();
+}
+
+document.getElementById('searchInput').addEventListener('input', renderList);
+document.getElementById('sortSelect').addEventListener('change', renderList);
+document.querySelectorAll('.filters .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    if (chip.dataset.type !== undefined) {
+      activeType = chip.dataset.type;
+      document.querySelectorAll('.filters .chip[data-type]').forEach(c => c.classList.remove('active'));
+    } else if (chip.dataset.region !== undefined) {
+      activeRegion = chip.dataset.region;
+      document.querySelectorAll('.filters .chip[data-region]').forEach(c => c.classList.remove('active'));
+    }
+    chip.classList.add('active');
+    renderList();
+  });
+});
+
+loadData();
+</script>
+</body>
+</html>

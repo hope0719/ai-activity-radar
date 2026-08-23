@@ -470,6 +470,49 @@ function fmtDate(a){
   return `${d.getMonth()+1}月${d.getDate()}日`;
 }
 
+// 标题去金额：剥离 ¥/$/€/₹ 金额与奖池/prize 等奖励摘要，避免与奖励盒重复
+// 规则保守：只剥离"货币金额 + 紧贴奖励词"与明确的"名次词+金额"，不误伤比赛名中的数字（如 Pinch Me! I Want 50K）
+function stripTitleMoney(t){
+  if(!t) return t;
+  const hasMoney = /[¥$€₹]/.test(t);
+  let s = t;
+  s = s.replace(/[¥$€₹]\s*\d[\d,.]*\s*[-+]\s*\d[\d,.]*\s*[kKmM万W]?/g, ''); // 区间/连加 ¥5-20万
+  s = s.replace(/[¥$€₹]\s*\d[\d,.]*\s*[kKmM万W]?\s*\+?\s*(?:总奖池|奖池|奖金池|现金奖池|大奖|奖金|现金|总奖|prize pool|prizes|prize|Prizes|Prize|bonus|Bonus|bounties|Bounties|cash|Cash|credits|Credits)?/g, '');
+  s = s.replace(/(?:冠军|金奖|至尊奖|一等奖|二等奖|三等奖|全场大奖|总冠军|优胜奖)\s*[¥$€₹]?\s*\d[\d,.]*\s*万?/g, '');
+  s = s.replace(/(?:总奖金|奖金池|奖池|现金池|总奖池|奖金)\s*\d[\d,.]*\s*万/g, '');
+  s = s.replace(/\d[\d,.]*\s*万\s*(?:元|积分|额度|Token|API额度|奖金)?/g, '');
+  s = s.replace(/(?:百万|千万|亿万)\s*(?:奖金池|奖金|奖池|现金池|总奖池|现金)?/g, '');
+  s = s.replace(/\+?\s*(?:百|千|万|百万|千万|亿万)级\s*(?:投资|订单|扶持|资源|合作|股权)?/g, '');
+  s = s.replace(/\+?级\s*(?:投资|订单|扶持|资源|合作)/g, '');
+  s = s.replace(/(?:总)?(?:奖池|奖金池|现金奖池|现金池|总奖池|奖金)/g, '');
+  s = s.replace(/(?:大奖|现金|总奖|至尊奖)/g, '');
+  s = s.replace(/(?<=—\s*)池(?=\s|$)/g, '');
+  s = s.replace(/\s*元(?=API额度|额度|积分|Token|$)/g, '');
+  s = s.replace(/与\s*(?=\d)/g, '');
+  s = s.replace(/\b(?:prize pool|prizes|prize|bonus|cash|bounties|bounty|credits|Credits|Prizes|Prize|Cash|Bonuses?)\b/g, '');
+  s = s.replace(/\bNon-cash\b|\bnon-cash\b/g, '');
+  s = s.replace(/([—–-])\s*\+\s*/g, '$1 ');
+  s = s.replace(/\s*\/\s*(?:场景订单|股权投资|投资|订单)\s*$/g, '');
+  s = s.replace(/([—–-])\s*&\s+/g, '$1 ');
+  s = s.replace(/^\s*\+/, '');
+  s = s.replace(/\s*\+\s*$/, '');
+  s = s.replace(/\s*\+\s*(?=\s*$)/, '');
+  if(hasMoney) s = s.replace(/\s*\+\s+/g, ' ');
+  s = s.replace(/\s*Non-\s*$/i, '');
+  s = s.replace(/\s*与\s*(?=\d)/g, ' ');
+  s = s.replace(/\s*(?:与|和|及)\s*$/, '');
+  s = s.replace(/\s*[，,、;；]\s*$/, '');
+  s = s.replace(/\s+[—–]\s*$/, '');
+  s = s.replace(/\s+-\s*$/, '');
+  s = s.replace(/\s*[，,、;；]\s+/g, ' ');
+  s = s.replace(/\s*万\s*/, ' ');
+  s = s.replace(/\s{2,}/g, ' ');
+  s = s.replace(/\s*\(\s*\)\s*/g, '').replace(/\s*（\s*）\s*/g, '');
+  s = s.trim();
+  if(!s || s.length < 4) return t;
+  return s;
+}
+
 function oppCard(a){
   const diffLine = a.difficulty ? `<div class="diff-line"><span class="score-label">难度</span>${stars(a.difficulty)}${a.difficultyNote?`<span class="diff-note">${esc(a.difficultyNote)}</span>`:''}</div>` : '';
   const chips = (a.rewardTypes && a.rewardTypes.length) ? `<div class="reward-chips">${a.rewardTypes.map(r=>`<span class="reward-chip">${esc(r)}</span>`).join('')}</div>` : '';
@@ -491,7 +534,7 @@ function oppCard(a){
   return `<a class="opportunity-card" href="${esc(a.url)}" target="_blank" rel="noopener">
     <div class="card-body">
       <div class="card-main">
-        <h3>${esc(a.title)}</h3>
+        <h3>${esc(stripTitleMoney(a.title))}</h3>
         ${meta ? `<p class="vendor-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>${meta}</p>` : ''}
         <div class="meta-row">${endOf(a) ? `<span class="deadline-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>${esc(fmtDate(a))} 截止</span>` : `<span class="deadline-line long-term">长期开放</span>`}${off}${sug}${chips}</div>
         <div class="score-diff-row"><span class="score-line"><span class="score-label">推荐</span>${stars(a.score)}</span><span class="diff-line"><span class="score-label">难度</span>${stars(a.difficulty)}</span>${a.difficultyNote?`<span class="diff-note">${esc(a.difficultyNote)}</span>`:''}</div>
@@ -521,7 +564,7 @@ function renderDeadline(){
     <a class="deadline-card" href="${esc(a.url)}" target="_blank" rel="noopener">
       <img class="dl-icon" src="${asset(a.image)}" alt="" loading="lazy"/>
       <div class="dl-body">
-        <h3>${esc(a.title)}</h3>
+        <h3>${esc(stripTitleMoney(a.title))}</h3>
       </div>
       ${deadlineBadge(a)}
     </a>`).join('') : '<div class="empty-state">暂无即将截止的活动</div>';

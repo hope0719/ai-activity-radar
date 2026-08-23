@@ -52,7 +52,7 @@
     padding:0 clamp(20px,6vw,112px);
     display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
   }
-  .brand-mark{display:inline-flex;align-items:center;gap:14px;font-size:22px;font-weight:780}
+  .brand-mark{display:inline-flex;align-items:center;gap:14px;font-size:22px;font-weight:780;white-space:nowrap}
   .brand-mark b{font-size:15px;font-weight:620;color:var(--muted)}
   .atlas-logo{
     border:2px solid var(--teal);border-radius:50%;
@@ -140,6 +140,10 @@
   .section-heading .sub{font-size:13px;color:var(--muted);margin-top:3px}
   .count{font-size:14px;color:var(--muted);white-space:nowrap}
   .count b{color:var(--teal-dark);font-weight:780}
+  .result-bar{display:flex;align-items:center;gap:12px;margin:0 0 14px}
+  .result-count{font-size:14px;color:var(--muted)}
+  .result-count b{color:var(--teal-dark);font-weight:780}
+  .result-hint{font-size:13px;color:var(--muted)}
 
   /* closing-soon grid */
   .deadline-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:46px}
@@ -256,12 +260,16 @@
 
   /* ---------- Responsive ---------- */
   @media (max-width:1000px){
+    .update-pill{display:none}
     .deadline-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     .opportunity-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   }
   @media (max-width:680px){
     .site-nav{grid-template-columns:1fr auto;gap:10px}
     .site-nav nav{display:none}
+    .brand-mark{font-size:18px;gap:10px}
+    .atlas-logo{width:28px;height:28px}
+    .atlas-logo:after,.atlas-logo:before{inset:6px}
     .deadline-grid{grid-template-columns:1fr}
     .opportunity-grid{grid-template-columns:1fr}
     .opportunity-card{display:flex;flex-direction:column}
@@ -281,6 +289,7 @@
     <a href="#opportunities">全部机会</a>
     <a href="#closing">即将截止</a>
     <a href="#opportunities">分类</a>
+    <a href="#opportunities">长期有效</a>
   </nav>
   <div class="nav-tools">
     <span class="update-pill"><span class="amber-dot"></span> 更新于 <span id="updatedAt">—</span></span>
@@ -301,42 +310,14 @@
       <input id="searchInput" type="text" placeholder="搜索黑客松、积分、资助、奖金…" />
       <button class="search-btn" id="searchBtn" type="button">搜索</button>
     </label>
-    <div class="hero-chips" id="quickChips">
-      <button class="chip active" data-quick="all">全部机会</button>
-      <button class="chip" data-quick="closing">即将截止</button>
-      <button class="chip" data-quick="longterm">长期有效</button>
-    </div>
   </div>
 </section>
 
 <main class="wrap">
-  <section id="closing">
-    <div class="section-heading deadline-heading">
-      <div class="section-heading-label">
-        <span class="ico">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-1 4-1 6a3 3 0 0 0 6 0c0-1-.5-2-1-3 2 1 4 3 4 6a7 7 0 1 1-14 0c0-3 2-5 4-7 1 1 1 2 2 4 1-2 1-4 0-6z"/></svg>
-        </span>
-        <div>
-          <h2>即将截止</h2>
-          <div class="sub">距离报名通道关闭最近的机会</div>
-        </div>
-      </div>
-    </div>
-    <div class="deadline-grid" id="deadlineGrid"></div>
-  </section>
-
   <section id="opportunities">
-    <div class="section-heading">
-      <div class="section-heading-label">
-        <span class="ico" style="background:var(--teal-soft);color:var(--teal-dark)">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5M16 4v5"/></svg>
-        </span>
-        <div>
-          <h2>全部机会</h2>
-          <div class="sub">已自动隐藏截止超过 7 天的活动</div>
-        </div>
-      </div>
-      <span class="count">共 <b id="listCount">0</b> 条结果</span>
+    <div class="result-bar">
+      <span class="result-count">共 <b id="listCount">0</b> 条结果</span>
+      <span class="result-hint">已自动隐藏截止超过 7 天的活动</span>
     </div>
 
     <div class="smart-filter-ribbon">
@@ -549,27 +530,6 @@ function oppCard(a){
   </a>`;
 }
 
-function renderDeadline(){
-  const list = ALL.filter(a=>{
-    const s = endOf(a); if(!s) return false;
-    const d = new Date(s); if(isNaN(d.getTime())) return false;
-    if(d.getTime() < NOW) return false;              // 即将截止只展示未结束的
-    return true;
-  }).sort((x,y)=>{
-    const dx = endOf(x)?new Date(endOf(x)).getTime():Infinity;
-    const dy = endOf(y)?new Date(endOf(y)).getTime():Infinity;
-    return dx - dy;
-  }).slice(0,4);
-  document.getElementById('deadlineGrid').innerHTML = list.length ? list.map(a=>`
-    <a class="deadline-card" href="${esc(a.url)}" target="_blank" rel="noopener">
-      <img class="dl-icon" src="${asset(a.image)}" alt="" loading="lazy"/>
-      <div class="dl-body">
-        <h3>${esc(stripTitleMoney(a.title))}</h3>
-      </div>
-      ${deadlineBadge(a)}
-    </a>`).join('') : '<div class="empty-state">暂无即将截止的活动</div>';
-}
-
 function renderList(){
   const list = sortList(ALL.filter(matches));
   document.getElementById('listCount').textContent = list.length;
@@ -653,7 +613,6 @@ async function init(){
   }
   buildMenus();
   bindUI();
-  renderDeadline();
   renderList();
 }
 init();

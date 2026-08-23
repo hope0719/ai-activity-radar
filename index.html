@@ -358,7 +358,7 @@
 
 <footer>
   <div class="wrap foot-inner">
-    <div>AI 活动雷达 · 数据来源 <a href="https://airadar.laifuyou.com/zh" target="_blank" rel="noopener">airadar.laifuyou.com</a>，自动抓取整理 · 已过滤过期 7 天以上活动</div>
+    <div>AI 活动雷达 · 数据来源开源项目 <a href="https://github.com/JS-banana/ai-opportunity-radar" target="_blank" rel="noopener">ai-opportunity-radar</a>（airadar.laifuyou.com 同源）· 已过滤过期 7 天以上活动</div>
     <div>© 2026 · 部署于 <a href="https://github.com/hope0719/ai-activity-radar" target="_blank" rel="noopener">GitHub Pages</a></div>
   </div>
 </footer>
@@ -370,14 +370,18 @@ const NOW = Date.now();
 const state = { search:'', type:'all', region:'all', sort:'deadline', quick:'all' };
 let ALL = [];
 
-const TYPE_OPTIONS = ['黑客松','开发挑战','AI 竞赛','权益福利','开发激励','内容创作'];
-const REGION_OPTIONS = ['全球','中国','北美','欧洲','线上','日本'];
+const TYPE_OPTIONS = ['黑客松','开发挑战','AI 竞赛','权益福利','开发激励','内容创作','内测资格','其他'];
+const REGION_OPTIONS = ['全球','中国','北美','亚太','欧洲','日本','其他'];
 const SORT_OPTIONS = [
   {v:'deadline', t:'截止日期'},
   {v:'score', t:'推荐指数'},
   {v:'reward', t:'奖金池'},
-  {v:'newest', t:'最新抓取'}
+  {v:'newest', t:'最新发现'}
 ];
+
+// 中文枚举 → 样式类
+const OFF_CLASS = {'官方确认':'confirmed','待确认':'suspected','非官方':'unofficial'};
+const SUG_CLASS = {'立即行动':'act-now','值得参加':'worth-doing','先关注':'watch','跳过':'skip'};
 
 function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function asset(img){ return 'assets/' + (img || 'path-prize-envelope.png'); }
@@ -388,12 +392,16 @@ function parseDate(s){
   if(!m) return null;
   return new Date(+m[1], +m[2]-1, +m[3]);
 }
-function daysLeft(s){
-  const d = parseDate(s); if(!d) return null;
+function endOf(a){ return a.endAt || a.deadline_date; }
+function daysLeft(a){
+  const s = endOf(a); if(!s) return null;
+  const d = new Date(s); if(isNaN(d.getTime())) return null;
   return Math.ceil((d.getTime() - NOW) / 86400000);
 }
-function deadlineBadge(s){
-  const n = daysLeft(s);
+function deadlineBadge(a){
+  const s = endOf(a);
+  if(!s) return '<span class="deadline-badge">长期开放</span>';
+  const n = daysLeft(a);
   if(n === null) return '<span class="deadline-badge">长期开放</span>';
   if(n < 0) return '<span class="deadline-badge urgent">已结束</span>';
   const urgent = n <= 7 ? ' urgent' : '';
@@ -422,51 +430,69 @@ function rewardVal(a){
 function matches(a){
   if(state.search){
     const q = state.search.toLowerCase();
-    if(!(`${a.title} ${a.vendor} ${a.reward} ${a.summary} ${a.type}`).toLowerCase().includes(q)) return false;
+    if(!(`${a.title} ${a.vendor} ${a.reward} ${a.rewardDetail||''} ${a.type} ${a.region} ${a.officialStatus||''} ${a.suggestion||''}`).toLowerCase().includes(q)) return false;
   }
   if(state.type !== 'all' && a.type !== state.type) return false;
   if(state.region !== 'all' && a.region !== state.region) return false;
-  if(state.quick === 'online' && a.region !== '线上') return false;
+  if(state.quick === 'online'){
+    const online = a.region === '线上' || (a.format && a.format.includes('线上'));
+    if(!online) return false;
+  }
   if(state.quick === 'reward' && !a.reward) return false;
   if(state.quick === 'closing'){
-    const n = daysLeft(a.deadline_date);
+    const n = daysLeft(a);
     if(n === null || n < 0 || n > 14) return false;
   }
-  // expiry safety net (>7 days past)
-  const d = parseDate(a.deadline_date);
-  if(d && (NOW - d.getTime()) > CUTOFF_MS) return false;
+  // 过期>7天不显示（按 endAt 精确时刻，动态随当前时间生效）
+  const s = endOf(a);
+  if(s){ const d = new Date(s); if(!isNaN(d.getTime()) && (NOW - d.getTime()) > CUTOFF_MS) return false; }
   return true;
 }
 function sortList(list){
   const s = state.sort;
   if(s === 'score') return list.sort((x,y)=> (y.score||0)-(x.score||0));
   if(s === 'reward') return list.sort((x,y)=> rewardVal(y)-rewardVal(x));
-  if(s === 'newest') return list.sort((x,y)=> (y.scraped_at||'').localeCompare(x.scraped_at||''));
+  if(s === 'newest') return list.sort((x,y)=> (y.discoveredAt||'').localeCompare(x.discoveredAt||''));
   return list.sort((x,y)=>{
-    const dx = parseDate(x.deadline_date), dy = parseDate(y.deadline_date);
-    if(!dx && !dy) return 0; if(!dx) return 1; if(!dy) return -1;
+    const dx = endOf(x)?new Date(endOf(x)).getTime():Infinity;
+    const dy = endOf(y)?new Date(endOf(y)).getTime():Infinity;
     return dx - dy;
   });
 }
 
+function fmtDate(a){
+  const s = endOf(a); if(!s) return '长期开放';
+  const d = new Date(s); if(isNaN(d.getTime())) return '';
+  return `${d.getMonth()+1}月${d.getDate()}日`;
+}
+
 function oppCard(a){
+  const diffLine = a.difficulty ? `<div class="diff-line"><span class="score-label">难度</span>${stars(a.difficulty)}${a.difficultyNote?`<span class="diff-note">${esc(a.difficultyNote)}</span>`:''}</div>` : '';
+  const chips = (a.rewardTypes && a.rewardTypes.length) ? `<div class="reward-chips">${a.rewardTypes.map(r=>`<span class="reward-chip">${esc(r)}</span>`).join('')}</div>` : '';
+  const off = a.officialStatus ? `<span class="official-badge ${OFF_CLASS[a.officialStatus]||''}">${esc(a.officialStatus)}</span>` : '';
+  const sug = a.suggestion ? `<span class="suggest-tag ${SUG_CLASS[a.suggestion]||''}">${esc(a.suggestion)}</span>` : '';
+  const badges = (off || sug) ? `<div class="badge-row">${off}${sug}</div>` : '';
+  const sum = a.rewardDetail || a.difficultyNote || a.participation || '';
   return `<a class="opportunity-card" href="${esc(a.url)}" target="_blank" rel="noopener">
     <div class="card-media"><img src="${asset(a.image)}" alt="" loading="lazy"/></div>
     <div class="card-body">
       <div class="card-main">
         <h3>${esc(a.title)}</h3>
-        ${a.vendor ? `<p class="vendor-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>${esc(a.vendor)}</p>` : ''}
+        ${a.vendor && a.vendor !== '其他' && a.vendor !== 'Unknown' ? `<p class="vendor-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>${esc(a.vendor)}</p>` : ''}
         <div class="meta-line">
           ${a.region ? `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.6 3.6 5.6 3.6 9S14.4 18.4 12 21M12 3C9.6 5.6 8.4 8.6 8.4 12S9.6 18.4 12 21"/></svg>${esc(a.region)}</span>` : ''}
-          ${a.date_text ? `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>${esc(a.date_text)}</span>` : ''}
+          ${endOf(a) ? `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>${esc(fmtDate(a))} 截止</span>` : `<span>长期开放</span>`}
         </div>
-        <div class="score-line"><span class="score-label">推荐指数</span>${stars(a.score)}</div>
-        ${a.summary ? `<p class="summary">${esc(a.summary)}</p>` : ''}
-        ${a.reward ? `<div class="reward-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 15 9l7 .5-5.5 4.5L18 21l-6-4-6 4 1.5-7L2 9.5 9 9z"/></svg><b>${esc(a.reward)}</b>${a.duration?`<small>${esc(a.duration)}</small>`:''}</div>` : ''}
+        <div class="score-line"><span class="score-label">推荐</span>${stars(a.score)}</div>
+        ${diffLine}
+        ${badges}
+        ${chips}
+        ${a.reward ? `<div class="reward-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 15 9l7 .5-5.5 4.5L18 21l-6-4-6 4 1.5-7L2 9.5 9 9z"/></svg><b>${esc(a.reward)}</b></div>` : ''}
+        ${sum ? `<p class="summary">${esc(sum)}</p>` : ''}
       </div>
       <div class="card-footer">
         <span class="type-tag">${esc(a.type || '其他')}</span>
-        ${deadlineBadge(a.deadline_date)}
+        ${deadlineBadge(a)}
       </div>
     </div>
   </a>`;
@@ -474,25 +500,25 @@ function oppCard(a){
 
 function renderDeadline(){
   const list = ALL.filter(a=>{
-    const d = parseDate(a.deadline_date);
-    if(!d) return false;
-    if((NOW - d.getTime()) > CUTOFF_MS) return false; // hide >7d expired
+    const s = endOf(a); if(!s) return false;
+    const d = new Date(s); if(isNaN(d.getTime())) return false;
     if(d.getTime() < NOW) return false;              // 即将截止只展示未结束的
     return true;
   }).sort((x,y)=>{
-    const dx=parseDate(x.deadline_date), dy=parseDate(y.deadline_date);
-    return dx-dy;
+    const dx = endOf(x)?new Date(endOf(x)).getTime():Infinity;
+    const dy = endOf(y)?new Date(endOf(y)).getTime():Infinity;
+    return dx - dy;
   }).slice(0,4);
-  document.getElementById('deadlineGrid').innerHTML = list.map(a=>`
+  document.getElementById('deadlineGrid').innerHTML = list.length ? list.map(a=>`
     <a class="deadline-card" href="${esc(a.url)}" target="_blank" rel="noopener">
       <img class="dl-icon" src="${asset(a.image)}" alt="" loading="lazy"/>
       <div class="dl-body">
         <h3>${esc(a.title)}</h3>
         <span class="type-tag">${esc(a.type || '其他')}</span>
-        <p>${esc(a.region || '')}${a.region && a.summary ? ' · ' : ''}${esc(a.summary || '')}</p>
+        <p>${esc(a.region || '')}${a.region && (a.reward||a.rewardDetail) ? ' · ' : ''}${esc(a.reward||a.rewardDetail||'')}</p>
       </div>
-      ${deadlineBadge(a.deadline_date)}
-    </a>`).join('') || '<div class="empty-state">暂无即将截止的活动</div>';
+      ${deadlineBadge(a)}
+    </a>`).join('') : '<div class="empty-state">暂无即将截止的活动</div>';
 }
 
 function renderList(){

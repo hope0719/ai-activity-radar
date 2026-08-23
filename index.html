@@ -239,8 +239,7 @@
   }
   .reward-box svg{width:18px;height:18px;color:var(--teal);margin-top:1px}
   .reward-content{min-width:0}
-  .reward-box b{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4;
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .reward-box b{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4;word-break:break-word}
   .reward-box small{display:block;color:var(--muted);font-size:11px;margin-top:3px;line-height:1.4}
   .card-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;padding-top:12px}
   .type-tag{
@@ -478,8 +477,12 @@ function oppCard(a){
   const off = a.officialStatus ? `<span class="official-badge ${OFF_CLASS[a.officialStatus]||''}">${esc(a.officialStatus)}</span>` : '';
   const sug = a.suggestion ? `<span class="suggest-tag ${SUG_CLASS[a.suggestion]||''}">${esc(a.suggestion)}</span>` : '';
   const badges = (off || sug) ? `<div class="badge-row">${off}${sug}</div>` : '';
-  // 去重 ①: 奖励详情 small 仅在与主奖励不同时显示（113/178 完全相同 + 54/178 rewardDetail 包含 reward → 都不再重复展示）
-  const detail = (a.rewardDetail && a.rewardDetail !== a.reward) ? a.rewardDetail : null;
+  // 去重 ①: 奖励盒只显示一份最完整的奖励文本
+  //  - 上游 snapshot.json 把 reward 截断到 80 字符，rewardDetail 是完整版（rewardDetail.startsWith(reward) 占 48 张，113 张完全相同）
+  //  - 优先取 rewardDetail（更长更完整），rewardDetail 不存在才回退到 reward
+  //  - 取消 small 双层结构，b 直接展示完整版，避免"截断 b + 全文 small"视觉重叠
+  const rewardShown = a.rewardDetail || a.reward || '';
+  const detail = null;
   // 去重 ②: 摘要只用 participation（参与方式/规则），不再 fallback 到 rewardDetail / difficultyNote（避免与上方奖励盒 / 难度行重复）
   const sum = a.participation || '';
   // 厂商 + 地区合并到一行
@@ -493,7 +496,7 @@ function oppCard(a){
         ${meta ? `<p class="vendor-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>${meta}</p>` : ''}
         <div class="meta-row">${endOf(a) ? `<span class="deadline-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>${esc(fmtDate(a))} 截止</span>` : `<span class="deadline-line long-term">长期开放</span>`}${off}${sug}${chips}</div>
         <div class="score-diff-row"><span class="score-line"><span class="score-label">推荐</span>${stars(a.score)}</span><span class="diff-line"><span class="score-label">难度</span>${stars(a.difficulty)}</span>${a.difficultyNote?`<span class="diff-note">${esc(a.difficultyNote)}</span>`:''}</div>
-        ${a.reward ? `<div class="reward-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 15 9l7 .5-5.5 4.5L18 21l-6-4-6 4 1.5-7L2 9.5 9 9z"/></svg><div class="reward-content"><b>${esc(a.reward)}</b>${detail ? `<small>${esc(detail)}</small>` : ''}</div></div>` : ''}
+        ${a.reward || a.rewardDetail ? `<div class="reward-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 15 9l7 .5-5.5 4.5L18 21l-6-4-6 4 1.5-7L2 9.5 9 9z"/></svg><div class="reward-content"><b>${esc(rewardShown)}</b>${detail ? `<small>${esc(detail)}</small>` : ''}</div></div>` : ''}
         ${sum ? `<p class="summary">${esc(sum)}</p>` : ''}
       </div>
       <div class="card-footer">

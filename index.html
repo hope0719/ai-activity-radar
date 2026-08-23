@@ -314,6 +314,21 @@
 </section>
 
 <main class="wrap">
+  <section id="closing">
+    <div class="section-heading deadline-heading">
+      <div class="section-heading-label">
+        <span class="ico">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-1 4-1 6a3 3 0 0 0 6 0c0-1-.5-2-1-3 2 1 4 3 4 6a7 7 0 1 1-14 0c0-3 2-5 4-7 1 1 1 2 2 4 1-2 1-4 0-6z"/></svg>
+        </span>
+        <div>
+          <h2>即将截止</h2>
+          <div class="sub">距离报名通道关闭最近的机会</div>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-grid" id="deadlineGrid"></div>
+  </section>
+
   <section id="opportunities">
     <div class="result-bar">
       <span class="result-count">共 <b id="listCount">0</b> 条结果</span>
@@ -530,6 +545,27 @@ function oppCard(a){
   </a>`;
 }
 
+function renderDeadline(){
+  const list = ALL.filter(a=>{
+    const s = endOf(a); if(!s) return false;
+    const d = new Date(s); if(isNaN(d.getTime())) return false;
+    if(d.getTime() < NOW) return false;
+    return true;
+  }).sort((x,y)=>{
+    const dx = endOf(x)?new Date(endOf(x)).getTime():Infinity;
+    const dy = endOf(y)?new Date(endOf(y)).getTime():Infinity;
+    return dx - dy;
+  }).slice(0,4);
+  document.getElementById('deadlineGrid').innerHTML = list.length ? list.map(a=>`
+    <a class="deadline-card" href="${esc(a.url)}" target="_blank" rel="noopener">
+      <img class="dl-icon" src="${asset(a.image)}" alt="" loading="lazy"/>
+      <div class="dl-body">
+        <h3>${esc(stripTitleMoney(a.title))}</h3>
+      </div>
+      ${deadlineBadge(a)}
+    </a>`).join('') : '<div class="empty-state">暂无即将截止的活动</div>';
+}
+
 function renderList(){
   const list = sortList(ALL.filter(matches));
   document.getElementById('listCount').textContent = list.length;
@@ -613,6 +649,7 @@ async function init(){
   }
   buildMenus();
   bindUI();
+  renderDeadline();
   renderList();
 }
 init();

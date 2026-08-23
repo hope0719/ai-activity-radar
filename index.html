@@ -168,6 +168,10 @@
   }
   .deadline-badge svg{width:14px;height:14px}
   .deadline-badge.urgent{color:#fff;background:#dd3d18;border-color:#dd3d18;box-shadow:0 2px 8px #dd3d1838}
+  .deadline-badge.soon{color:#8a6500;background:#fff3c2;border-color:#e3a90033;box-shadow:0 2px 6px #e3a90020}
+  .deadline-badge.distant{color:#fff;background:#2d9e3f;border-color:#2d9e3f;box-shadow:0 2px 8px #2d9e3f38}
+  .deadline-badge.ended{color:#999;background:#f0f0f0;border-color:#ccc;box-shadow:none}
+  .deadline-badge.longterm{color:var(--muted);background:transparent;border:1px dashed var(--line-strong);box-shadow:none}
   .opportunity-card > .deadline-badge{top:108px;right:14px}
 
   /* ---------- Filter ribbon ---------- */
@@ -414,13 +418,15 @@ function daysLeft(a){
 }
 function deadlineBadge(a){
   const s = endOf(a);
-  if(!s) return '<span class="deadline-badge">长期开放</span>';
+  if(!s) return '<span class="deadline-badge longterm">长期开放</span>';
   const n = daysLeft(a);
-  if(n === null) return '<span class="deadline-badge">长期开放</span>';
-  if(n < 0) return '<span class="deadline-badge urgent">已结束</span>';
-  const urgent = n <= 7 ? ' urgent' : '';
-  let txt = n === 0 ? '今天截止' : n + ' 天截止';
-  return `<span class="deadline-badge${urgent}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${txt}</span>`;
+  if(n === null) return '<span class="deadline-badge longterm">长期开放</span>';
+  if(n < 0) return '<span class="deadline-badge ended">已结束</span>';
+  let cls, txt;
+  if(n <= 7){ cls = 'urgent'; txt = n === 0 ? '今天截止' : n + ' 天截止'; }
+  else if(n <= 30){ cls = 'soon'; txt = n + ' 天截止'; }
+  else { cls = 'distant'; txt = n + ' 天截止'; }
+  return `<span class="deadline-badge ${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${txt}</span>`;
 }
 function stars(n){
   n = Math.max(0, Math.min(5, n|0));
@@ -589,7 +595,7 @@ function renderLongterm(){
       <div class="dl-body">
         <h3>${esc(stripTitleMoney(a.title))}</h3>
       </div>
-      <span class="deadline-badge">长期开放</span>
+      <span class="deadline-badge longterm">长期开放</span>
     </a>`).join('') : '<div class="empty-state">暂无长期有效的活动</div>';
 }
 

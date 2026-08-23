@@ -289,7 +289,7 @@
     <a href="#opportunities">全部机会</a>
     <a href="#closing">即将截止</a>
     <a href="#opportunities">分类</a>
-    <a href="#opportunities">长期有效</a>
+    <a href="#longterm">长期有效</a>
   </nav>
   <div class="nav-tools">
     <span class="update-pill"><span class="amber-dot"></span> 更新于 <span id="updatedAt">—</span></span>
@@ -327,6 +327,21 @@
       </div>
     </div>
     <div class="deadline-grid" id="deadlineGrid"></div>
+  </section>
+
+  <section id="longterm">
+    <div class="section-heading deadline-heading">
+      <div class="section-heading-label">
+        <span class="ico" style="background:var(--teal-soft);color:var(--teal-dark)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z"/><path d="M12 7v5l3 2"/></svg>
+        </span>
+        <div>
+          <h2>长期有效</h2>
+          <div class="sub">无截止日期限制，随时可参与的机会</div>
+        </div>
+      </div>
+    </div>
+    <div class="deadline-grid" id="longtermGrid"></div>
   </section>
 
   <section id="opportunities">
@@ -566,6 +581,18 @@ function renderDeadline(){
     </a>`).join('') : '<div class="empty-state">暂无即将截止的活动</div>';
 }
 
+function renderLongterm(){
+  const list = ALL.filter(a=> !endOf(a)).slice(0,4);
+  document.getElementById('longtermGrid').innerHTML = list.length ? list.map(a=>`
+    <a class="deadline-card" href="${esc(a.url)}" target="_blank" rel="noopener">
+      <img class="dl-icon" src="${asset(a.image)}" alt="" loading="lazy"/>
+      <div class="dl-body">
+        <h3>${esc(stripTitleMoney(a.title))}</h3>
+      </div>
+      <span class="deadline-badge">长期开放</span>
+    </a>`).join('') : '<div class="empty-state">暂无长期有效的活动</div>';
+}
+
 function renderList(){
   const list = sortList(ALL.filter(matches));
   document.getElementById('listCount').textContent = list.length;
@@ -650,6 +677,7 @@ async function init(){
   buildMenus();
   bindUI();
   renderDeadline();
+  renderLongterm();
   renderList();
 }
 init();

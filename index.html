@@ -616,16 +616,6 @@ function bindUI(){
   document.getElementById('searchInput').addEventListener('input', e=>{ state.search = e.target.value.trim(); renderList(); });
   document.getElementById('searchBtn').addEventListener('click', ()=>renderList());
 
-  // quick chips
-  document.querySelectorAll('#quickChips .chip').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('#quickChips .chip').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      state.quick = btn.dataset.quick;
-      renderList();
-    });
-  });
-
   // filter triggers (dropdowns)
   document.querySelectorAll('.filter-trigger').forEach(btn=>{
     btn.addEventListener('click', e=>{
@@ -658,7 +648,6 @@ function bindUI(){
     document.getElementById('typeVal').textContent='全部';
     document.getElementById('regionVal').textContent='全部';
     document.getElementById('sortVal').textContent='截止日期';
-    document.querySelectorAll('#quickChips .chip').forEach(b=>b.classList.toggle('active', b.dataset.quick==='all'));
     buildMenus(); renderList();
   });
 }

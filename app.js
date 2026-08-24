@@ -194,7 +194,7 @@ function renderLongterm(){
 }
 
 function renderList(){
-  const list = sortList(ALL.filter(matches));
+  const list = sortList(ALL.filter(a=> matches(a) && endOf(a)));
   document.getElementById('listCount').textContent = list.length;
   const grid = document.getElementById('grid');
   grid.innerHTML = list.length ? list.map(oppCard).join('') : '<div class="empty-state">没有符合条件的活动，试试调整筛选条件。</div>';

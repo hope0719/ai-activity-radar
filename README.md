@@ -72,6 +72,9 @@
 | 飞书数据源 | `lark-cli`（@larksuite/cli） | 以用户身份（`--as user`）拉取多维表格 |
 | 自动化 | WorkBuddy 每日定时任务 | 周期执行同步脚本，无人值守更新数据 |
 | 信息源 | `SOURCES.md` | 人工维护的信息渠道清单（中文资讯/竞赛平台/开发者计划/学术/自媒体） |
+| 观猹信息源 | [watcha.cn/r/LLLNp2](https://watcha.cn/r/LLLNp2) | 观猹（watcha.cn）活动猹频道：AI 行业评论与活动速递，人工核对后补录 |
+
+> **观猹信息源说明**：[观猹（watcha.cn）](https://watcha.cn) 是国内 AI 产品与活动社区，其「活动猹」频道会首发/速递各类 AI 比赛、开发者活动（如观猹×千问 AI「一键出海」Agent 比赛等）。观猹不作为自动同步上游（页面需登录、无公开 API），而是作为**人工补录线索源**：发现新的在办活动后，手工补录进 `data.json`（source 标记为 `观猹`）。具体入口见 [watcha.cn/r/LLLNp2](https://watcha.cn/r/LLLNp2)。
 
 ### 2.3 数据模型（data.json）
 

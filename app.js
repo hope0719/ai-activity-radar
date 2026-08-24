@@ -148,7 +148,7 @@ function oppCard(a){
   const vendor = (a.vendor && a.vendor !== '其他' && a.vendor !== 'Unknown') ? esc(a.vendor) : '';
   const region = a.region ? esc(a.region) : '';
   const meta = [vendor, region].filter(Boolean).join(' · ');
-  return `<a class="opportunity-card" href="${esc(a.url)}" target="_blank" rel="noopener">
+  return `<div class="opportunity-card">
     <div class="card-body">
       <div class="card-main">
         <h3>${esc(stripTitleMoney(a.title))}</h3>
@@ -160,10 +160,11 @@ function oppCard(a){
       </div>
       <div class="card-footer">
         <span class="type-tag">${esc(a.type || '其他')}</span>
+        <a class="action-btn" href="${esc(a.url)}" target="_blank" rel="noopener">立即行动</a>
       </div>
     </div>
     ${deadlineBadge(a)}
-  </a>`;
+  </div>`;
 }
 
 function renderDeadline(){

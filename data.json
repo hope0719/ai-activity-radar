@@ -1235,7 +1235,7 @@
       "difficulty": 2,
       "difficultyNote": "18岁以上，全球可参与；线上(8/17-9/3)或Santa Clara线下+颁奖(9/2-3)",
       "reward": "$40,500现金：总冠军$12,500 + Perfect Corp $2,500 + Foxit/Apptio/Impart等$1K赛道；另有DevNetw",
-      "rewardDetail": "$40,500现金：总冠军$12,500 + Perfect Corp $2,500 + Foxit/Apptio/Impart等$1K赛道；另有DevNetwork 2027全会议通票与Amazon Echo。详情见 https://api-cloud-ai-hackathon-2026.devpost.com",
+      "rewardDetail": "$40,500现金：总冠军$12,500 + Perfect Corp $2,500 + Foxit/Apptio/Impart等$1K赛道；另有DevNetwork 2027全会议通票与Amazon Echo。",
       "rewardTypes": [
         "现金奖金"
       ],
@@ -3078,7 +3078,7 @@
       "difficulty": 3,
       "difficultyNote": "需完整创新成果+商业计划书；初创组年营收/融资≤1000万元，团队/初创公司均可",
       "reward": "总奖金30万元(14席，初创/成长组各一等5万/二等3万/三等1万)；余杭区配套：最高600万研发补助、150万租金补助、500万贷款贴息、1000万天使引导基",
-      "rewardDetail": "总奖金30万元(14席，初创/成长组各一等5万/二等3万/三等1万)；余杭区配套：最高600万研发补助、150万租金补助、500万贷款贴息、1000万天使引导基金、算力券/模型券等；CAAI+启迪之星孵化赋能。详情见 https://www.caai.cn/site/content/8473.html",
+      "rewardDetail": "总奖金30万元(14席，初创/成长组各一等5万/二等3万/三等1万)；余杭区配套：最高600万研发补助、150万租金补助、500万贷款贴息、1000万天使引导基金、算力券/模型券等；CAAI+启迪之星孵化赋能。",
       "rewardTypes": [
         "现金奖金",
         "其他"
@@ -3139,7 +3139,7 @@
       "difficulty": 3,
       "difficultyNote": "开发自主交易/预测市场 Agent，需 TypeScript/Solidity，Web3 生态经验",
       "reward": "Prize pool $10,000 USD。虚拟赛：Aug 9 开始提交，Aug 23 截止。由 Delphi (知名加密研究机构) + Gensyn 主办。",
-      "rewardDetail": "Prize pool $10,000 USD。虚拟赛：Aug 9 开始提交，Aug 23 截止。由 Delphi (知名加密研究机构) + Gensyn 主办。详情: https://dorahacks.io/hackathon/delphi-agent-competition",
+      "rewardDetail": "Prize pool $10,000 USD。虚拟赛：Aug 9 开始提交，Aug 23 截止。由 Delphi (知名加密研究机构) + Gensyn 主办。",
       "rewardTypes": [
         "现金奖金"
       ],
@@ -3169,7 +3169,7 @@
       "difficulty": 3,
       "difficultyNote": "开发可自主推理/规划/执行的真实 AI Agent；线上参与开放，线下决赛(迪拜)需邀请",
       "reward": "$60,000+ prize pool。线上全球 Build Phase + Dubai AI Week 线下决赛（邀请制，不含差旅）。Fall 2026 日期",
-      "rewardDetail": "$60,000+ prize pool。线上全球 Build Phase + Dubai AI Week 线下决赛（邀请制，不含差旅）。Fall 2026 日期待定，报名已开放。详情: https://lablab.ai/ai-hackathons/ai-agents-ai-week-hackathon",
+      "rewardDetail": "$60,000+ prize pool。线上全球 Build Phase + Dubai AI Week 线下决赛（邀请制，不含差旅）。Fall 2026 日期待定，报名已开放。",
       "rewardTypes": [
         "现金奖金"
       ],
@@ -3199,7 +3199,7 @@
       "difficulty": 3,
       "difficultyNote": null,
       "reward": "$10,000奖池 + Minds Investment Programme最高$250K投资机会。全球开放无资格门槛，线上虚拟参与。需用Minds (Anim",
-      "rewardDetail": "$10,000奖池 + Minds Investment Programme最高$250K投资机会。全球开放无资格门槛，线上虚拟参与。需用Minds (Animoca Brands) 持久智能体技术构建创作者经济解决方案（创作者/YouTuber/艺术家工具），单/多Agent架构均可。4周赛事，2026-08-28 23:59 HKT 截止。详情: https://creativemindsjam.com/",
+      "rewardDetail": "$10,000奖池 + Minds Investment Programme最高$250K投资机会。全球开放无资格门槛，线上虚拟参与。需用Minds (Animoca Brands) 持久智能体技术构建创作者经济解决方案（创作者/YouTuber/艺术家工具），单/多Agent架构均可。4周赛事，2026-08-28 23:59 HKT 截止。",
       "rewardTypes": [
         "现金奖金",
         "其他"
@@ -3412,12 +3412,12 @@
       "difficulty": 4,
       "difficultyNote": "需开发完整app并集成RevenueCat SDK上架；学生可豁免商店上架（交代码+演示视频即可）",
       "reward": "$700K+现金（总奖池$1M+），Grand Prize $100K现金，21个类别（含学生NextGen类别）；Times Square广告牌、NYC颁奖典",
-      "rewardDetail": "$700K+现金（总奖池$1M+），Grand Prize $100K现金，21个类别（含学生NextGen类别）；Times Square广告牌、NYC颁奖典礼、9to5Mac/9to5Google报道、投资者曝光。官方公告: https://www.revenuecat.com/blog/company/announcing-shipaton-2026",
+      "rewardDetail": "$700K+现金（总奖池$1M+），Grand Prize $100K现金，21个类别（含学生NextGen类别）；Times Square广告牌、NYC颁奖典礼、9to5Mac/9to5Google报道、投资者曝光。官方公告:",
       "rewardTypes": [
         "现金奖金"
       ],
       "format": "在线，8/1-9/30期间上架新app至App Store/Google Play/Samsung Galaxy Store并集成RevenueCat SDK",
-      "participation": "https://revenuecat-shipaton-2026.devpost.com 或 shipaton.com 注册",
+      "participation": "或 shipaton.com 注册",
       "winningCriteria": "8/1-9/30期间发布的brand-new app + RevenueCat SDK集成（至少1个内购或RevenueCat Ads），按类别评奖",
       "timelineNotes": "注册5月15日-9月30日；提交窗口8月1日-9月30日(截止9月30日23:45 PDT)；评审10月1-13日；获奖公布约10月21日。需发布全新iOS/Android应用到App Store/Google Play。$685,000+现金奖金，14,000+参与者",
       "startAt": "2026-08-06T16:00:00.000Z",
@@ -3448,7 +3448,7 @@
         "认证证书"
       ],
       "format": "线上征集（5.25-9.10）+线下决赛（10.23 1024开发者节现场答辩）",
-      "participation": "https://challenge.xfyun.cn/robot 报名，企业/高校/团队/个人均可（≤5人）",
+      "participation": "报名，企业/高校/团队/个人均可（≤5人）",
       "winningCriteria": "9.10前提交机器人创新设计方案，初赛评50份入围，复赛前10强晋级决赛",
       "timelineNotes": "作品征集5月25日-9月10日；初赛评审9月11-15日(选50份入围)；复赛9月16-20日(选前10强)；决赛准备9月21日-10月22日；线下决赛10月23日(现场答辩)；颁奖10月24日(科大讯飞1024开发者节)",
       "startAt": "2026-08-06T16:00:00.000Z",
@@ -3563,8 +3563,8 @@
       "score": 4,
       "difficulty": 3,
       "difficultyNote": "需开发 agent 策略（kaggle-environments 模拟环境，Python），官方提供 starter 代码，上手门槛中等",
-      "reward": "总奖金池 $50,000（Kaggle × Google 官方模拟竞赛，8/3 发布）。详情 https://www.kaggle.com/competitio",
-      "rewardDetail": "总奖金池 $50,000（Kaggle × Google 官方模拟竞赛，8/3 发布）。详情 https://www.kaggle.com/competitions/kaggriculture",
+      "reward": "总奖金池 $50,000（Kaggle × Google 官方模拟竞赛，8/3 发布）。",
+      "rewardDetail": "总奖金池 $50,000（Kaggle × Google 官方模拟竞赛，8/3 发布）。",
       "rewardTypes": [
         "现金奖金"
       ],
@@ -3601,7 +3601,7 @@
       "format": "线上",
       "participation": "微信赛事平台报名，1-3人组队，不限学历背景；作品须为原创微信小程序并在7/17-10/17提报期内正式上线",
       "winningCriteria": "从产品实用性、产品创新性、用户体验感、作品完整度四个维度综合评定。总决赛评一等奖1组(10万元)、二等奖3组(各5万元)、三等奖6组(各3万元)、优秀AI创新作品3组(各2万元)",
-      "timelineNotes": "作品提报期 2026-07-17~2026-10-17；官方详情 https://contest.weixin.qq.com/eventDetails?id=4598379302114656257",
+      "timelineNotes": "作品提报期 2026-07-17~2026-10-17；官方",
       "startAt": "2026-08-07T16:00:00.000Z",
       "endAt": "2026-10-17T15:59:59.000Z",
       "deadline_date": "2026-10-17",
@@ -3631,7 +3631,7 @@
       "format": "线上",
       "participation": "unity.cn/ucdc2026 报名；小游戏/移动端/PC三品类，AI赋能开发全流程，7.28起作品征集",
       "winningCriteria": "从创意、技术、落地三个维度严格评审。双赛道：Codely+赛道看重与Codely的共创能力；AI+赛道看重创作者原生开发能力。设Codely全能大师(5万元,1席)、即玩星火奖/指尖高光奖/沉浸大作奖(各3万元,各2席)等",
-      "timelineNotes": "作品征集 2026-07-28~2026-10-31，网络评选 11/1-11/20；官方 https://unity.cn/ucdc2026",
+      "timelineNotes": "作品征集 2026-07-28~2026-10-31，网络评选 11/1-11/20",
       "startAt": "2026-08-07T16:00:00.000Z",
       "endAt": "2026-10-31T15:59:59.000Z",
       "deadline_date": "2026-10-31",
@@ -3685,7 +3685,7 @@
       "difficulty": 2,
       "difficultyNote": "提交可运行Agent+Demo即可，Qoder加分项非强制",
       "reward": "一等奖 Qoder 20000 credits+阿里云定制背包；二等奖 Qoder 10000 credits+背包；三等奖5名背包。赛题详情 https://",
-      "rewardDetail": "一等奖 Qoder 20000 credits+阿里云定制背包；二等奖 Qoder 10000 credits+背包；三等奖5名背包。赛题详情 https://tianchi.aliyun.com/competition/entrance/532505",
+      "rewardDetail": "一等奖 Qoder 20000 credits+阿里云定制背包；二等奖 Qoder 10000 credits+背包；三等奖5名背包。赛题",
       "rewardTypes": [
         "API积分",
         "实物奖品"
@@ -4016,8 +4016,8 @@
       "score": 4,
       "difficulty": 4,
       "difficultyNote": "面向具身智能机器人整机方案（人形/轮式/四足），需算法+机器人团队，海选-晋级赛-总决赛三级实战",
-      "reward": "获奖团队获5-20万赛事奖金；产业基金最高千万级股权投资；千万级真实场景合作订单；品牌曝光+人才认证。详情见官方报道：https://www.ithome.co",
-      "rewardDetail": "获奖团队获5-20万赛事奖金；产业基金最高千万级股权投资；千万级真实场景合作订单；品牌曝光+人才认证。详情见官方报道：https://www.ithome.com/0/980/541.htm",
+      "reward": "获奖团队获5-20万赛事奖金；产业基金最高千万级股权投资；千万级真实场景合作订单；品牌曝光+人才认证。详情见官方报道：",
+      "rewardDetail": "获奖团队获5-20万赛事奖金；产业基金最高千万级股权投资；千万级真实场景合作订单；品牌曝光+人才认证。详情见官方报道：",
       "rewardTypes": [
         "现金奖金",
         "其他"
@@ -4080,7 +4080,7 @@
       "difficulty": 5,
       "difficultyNote": "需ML系统/训练优化能力：从零训练~50M参数LLM，需掌握NKI kernel开发；无Trainium经验也可但门槛高",
       "reward": "$40,000现金池：冠军$25K/亚军$10K/季军$5K。Phase1在30分钟单芯片训练预算内最大化模型能力，Top10晋级Phase2获得完整Trn2服",
-      "rewardDetail": "$40,000现金池：冠军$25K/亚军$10K/季军$5K。Phase1在30分钟单芯片训练预算内最大化模型能力，Top10晋级Phase2获得完整Trn2服务器；决赛典礼在NeurIPS 2026。仅限前100队注册，1-4人/队。详情: https://trainium-frontier.devpost.com",
+      "rewardDetail": "$40,000现金池：冠军$25K/亚军$10K/季军$5K。Phase1在30分钟单芯片训练预算内最大化模型能力，Top10晋级Phase2获得完整Trn2服务器；决赛典礼在NeurIPS 2026。仅限前100队注册，1-4人/队。",
       "rewardTypes": [
         "现金奖金"
       ],
@@ -4320,7 +4320,7 @@
       "difficulty": 2,
       "difficultyNote": "新手友好，线上免费报名，社会公益主题，无门槛",
       "reward": "$11,685现金（Best Overall $2,100/2nd $2,050/3rd $2,035/4th $2,000/Best No-Code AI A",
-      "rewardDetail": "$11,685现金（Best Overall $2,100/2nd $2,050/3rd $2,035/4th $2,000/Best No-Code AI App $2,000等）+ Momen credits + 域名优惠券；Devpost 页面标价 $18,285（含非现金）。详情: https://www.startupgrantsindia.com/gatewayhacks-2026-software-ai",
+      "rewardDetail": "$11,685现金（Best Overall $2,100/2nd $2,050/3rd $2,035/4th $2,000/Best No-Code AI App $2,000等）+ Momen credits + 域名优惠券；Devpost 页面标价 $18,285（含非现金）。",
       "rewardTypes": [
         "现金奖金",
         "API积分"
@@ -4382,8 +4382,8 @@
       "score": 3,
       "difficulty": 3,
       "difficultyNote": "需提交完整应用场景方案+路演，产业落地导向",
-      "reward": "获奖项目纳入主办方100亿投资基金项目池，优先获长三角人工智能产业基金投融资，免费入驻OPC科创基地（产业园区招商平台）。详情：https://news.sci",
-      "rewardDetail": "获奖项目纳入主办方100亿投资基金项目池，优先获长三角人工智能产业基金投融资，免费入驻OPC科创基地（产业园区招商平台）。详情：https://news.sciencenet.cn/htmlnews/2026/7/568681.shtm",
+      "reward": "获奖项目纳入主办方100亿投资基金项目池，优先获长三角人工智能产业基金投融资，免费入驻OPC科创基地（产业园区招商平台）。",
+      "rewardDetail": "获奖项目纳入主办方100亿投资基金项目池，优先获长三角人工智能产业基金投融资，免费入驻OPC科创基地（产业园区招商平台）。",
       "rewardTypes": [
         "其他"
       ],
@@ -4534,7 +4534,7 @@
       "difficulty": 3,
       "difficultyNote": "面向高校在读学生(本科/硕士)，1-3人组队认领企业真实命题，需提交初步思路；全赛程免费使用官方AI工具",
       "reward": "上百家名企(蔚来/瑞幸/安克创新/名创优品/去哪儿/小鹏/元气森林等)真实命题，奖励为实习/正式Offer+AI先锋荣誉+案例集收录；无现金奖。详情: http",
-      "rewardDetail": "上百家名企(蔚来/瑞幸/安克创新/名创优品/去哪儿/小鹏/元气森林等)真实命题，奖励为实习/正式Offer+AI先锋荣誉+案例集收录；无现金奖。详情: https://www.aitop100.cn/infomation/details/34142.html",
+      "rewardDetail": "上百家名企(蔚来/瑞幸/安克创新/名创优品/去哪儿/小鹏/元气森林等)真实命题，奖励为实习/正式Offer+AI先锋荣誉+案例集收录；无现金奖。",
       "rewardTypes": [
         "其他"
       ],
@@ -4563,8 +4563,8 @@
       "score": 3,
       "difficulty": 1,
       "difficultyNote": "Vercel AI Gateway 免费档调用 zai/glm-5.2，需覆盖 User-Agent eve/0.27.8，可能需绑卡",
-      "reward": "免费高速(300tps)调用 zai/glm-5.2 模型，截止8/27；社区实测可用。帖子: https://linux.do/t/topic/2770513",
-      "rewardDetail": "免费高速(300tps)调用 zai/glm-5.2 模型，截止8/27；社区实测可用。帖子: https://linux.do/t/topic/2770513",
+      "reward": "免费高速(300tps)调用 zai/glm-5.2 模型，截止8/27；社区实测可用。帖子:",
+      "rewardDetail": "免费高速(300tps)调用 zai/glm-5.2 模型，截止8/27；社区实测可用。帖子:",
       "rewardTypes": [
         "API积分"
       ],
@@ -4661,7 +4661,7 @@
       "format": "线上（Devpost）",
       "participation": "Devpost 注册（7/15 已开放报名），10/5 开赛",
       "winningCriteria": "基于区块链+AI 构建气候解决方案：碳市场透明度、可再生能源、可持续供应链、气候数据透明（支持 UN COP31 目标）",
-      "timelineNotes": "10/5-10/25 在线构建，10/25 23:59 UTC 提交截止，11/10-21 COP31 公布获奖；详情见 https://ieee-iget.org/climatechain-global-hackathon-2026",
+      "timelineNotes": "10/5-10/25 在线构建，10/25 23:59 UTC 提交截止，11/10-21 COP31 公布获奖",
       "startAt": "2026-08-20T16:00:00.000Z",
       "endAt": "2026-10-24T16:00:00.000Z",
       "deadline_date": "2026-10-24",
@@ -4684,7 +4684,7 @@
       "difficulty": 3,
       "difficultyNote": null,
       "reward": "提交研究计划¥200（新用户再+¥100=¥300）+200元API初始额度+线上VSCode工作空间；优秀团队获进一步LLM API支持。清华大学计算社会科学",
-      "rewardDetail": "提交研究计划¥200（新用户再+¥100=¥300）+200元API初始额度+线上VSCode工作空间；优秀团队获进一步LLM API支持。清华大学计算社会科学与国家治理实验室+电子工程系主办，基于AgentSociety²智能体社会模拟平台。详情: https://www.leiphone.com/category/industrynews/CbroiTWerVTsMc8i.html",
+      "rewardDetail": "提交研究计划¥200（新用户再+¥100=¥300）+200元API初始额度+线上VSCode工作空间；优秀团队获进一步LLM API支持。清华大学计算社会科学与国家治理实验室+电子工程系主办，基于AgentSociety²智能体社会模拟平台。",
       "rewardTypes": [
         "现金奖金",
         "API积分"
@@ -4753,7 +4753,7 @@
       "format": "线上 leaderboard 提交 + 12月 NeurIPS 线下 workshop（12/11-12）",
       "participation": "官网注册即可，dev leaderboard 已开放；提交 4-6 页 workshop 论文",
       "winningCriteria": "论文提交 9/15；定量提交 9/30；10/15 最终评估与获奖短名单",
-      "timelineNotes": "详情见 https://roco-spring.github.io",
+      "timelineNotes": "",
       "startAt": "2026-08-21T16:00:00.000Z",
       "endAt": "2026-09-29T16:00:00.000Z",
       "deadline_date": "2026-09-29",

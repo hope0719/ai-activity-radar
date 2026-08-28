@@ -281,28 +281,39 @@ function main() {
     process.exit(3);
   }
 
+  // 保留手工补录（非双源来源）：source 不属于 lucianaib / 上游映射产生的记录
+  // 这些是人工补录的（观猹/抖音/本地扩充等），双源同步不应冲掉它们
+  const manualRecords = (existing && existing.activities ? existing.activities : [])
+    .filter(a => {
+      const s = a.source || '';
+      return s !== 'lucianaib' && !s.startsWith(REPO.split('/')[1]) && !['Devpost','天池','DoraHacks','CompeteHub','lablab.ai','AgentDeadlines','HuggingFace','V2EX','Twitter','官网'].includes(s);
+    })
+    .filter(a => a.id && !result.some(r => r.id === a.id)); // 与双源去重（按 id）
+  const merged = [...result, ...manualRecords];
+  console.log(`ℹ 保留手工补录 ${manualRecords.length} 条（来源: ${[...new Set(manualRecords.map(a=>a.source||'?'))].join(', ') || '无'}）`);
+
   const data = {
     site_name: 'AI 活动雷达',
     tagline: '在时间截止前找到 AI 机会',
     updated_at: new Date().toISOString(),
-    source: `${REPO} (airadar.laifuyou.com) + LucianaiB 飞书表「AI 活动推荐」双源合并`,
-    activities: result,
+    source: `${REPO} (airadar.laifuyou.com) + LucianaiB 飞书表「AI 活动推荐」双源合并` + (manualRecords.length ? ` + 手工补录 ${manualRecords.length} 条` : ''),
+    activities: merged,
   };
 
   if (DRY) {
     fs.writeFileSync(OUT, JSON.stringify(data, null, 2));
-    console.log(`✓ [dry-run] 已写入 ${OUT}（共 ${result.length} 条），未提交。`);
+    console.log(`✓ [dry-run] 已写入 ${OUT}（共 ${merged.length} 条，含手工 ${manualRecords.length} 条），未提交。`);
     process.exit(0);
   }
 
   // 无变化则跳过
-  if (existing && JSON.stringify(existing.activities) === JSON.stringify(result)) {
+  if (existing && JSON.stringify(existing.activities) === JSON.stringify(merged)) {
     console.log('✓ 双源均无变化，data.json 无需更新');
     process.exit(0);
   }
 
   const prevIds = new Set((existing ? existing.activities : []).map(a => a.id));
-  const newIds = new Set(result.map(a => a.id));
+  const newIds = new Set(merged.map(a => a.id));
   let added = 0, removed = 0;
   for (const id of newIds) if (!prevIds.has(id)) added++;
   for (const id of prevIds) if (!newIds.has(id)) removed++;
@@ -310,15 +321,15 @@ function main() {
   fs.writeFileSync(OUT_REAL, JSON.stringify(data, null, 2));
 
   const now = Date.now();
-  const active = activeCount(result, now);
-  console.log(`✓ 已写入 data.json：${result.length} 条（新增 ${added} / 移除 ${removed}），页面活跃展示约 ${active} 条`);
+  const active = activeCount(merged, now);
+  console.log(`✓ 已写入 data.json：${merged.length} 条（新增 ${added} / 移除 ${removed}），页面活跃展示约 ${active} 条`);
 
   const byType = {}, bySrc = {};
-  for (const a of result) { byType[a.type] = (byType[a.type] || 0) + 1; bySrc[a.source || '?'] = (bySrc[a.source || '?'] || 0) + 1; }
+  for (const a of merged) { byType[a.type] = (byType[a.type] || 0) + 1; bySrc[a.source || '?'] = (bySrc[a.source || '?'] || 0) + 1; }
   console.log('类型分布：', JSON.stringify(byType));
   console.log('来源分布：', JSON.stringify(bySrc));
 
-  const msg = `chore(sync): 双源同步 JS-banana(${mappedJB.length}) + LucianaiB(${kept},去重${dropped}) — 共${result.length}条（新增${added} 移除${removed}），活跃约${active}`;
+  const msg = `chore(sync): 双源同步 JS-banana(${mappedJB.length}) + LucianaiB(${kept},去重${dropped}) — 共${merged.length}条（含手工${manualRecords.length}，新增${added} 移除${removed}），活跃约${active}`;
   try {
     fs.writeFileSync(MSG_FILE, msg, 'utf8');
     execSync(`git -C ${JSON.stringify(PROJECT_DIR)} add data.json`, { stdio: 'ignore' });

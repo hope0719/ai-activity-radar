@@ -1,7 +1,7 @@
 {
   "site_name": "AI 活动雷达",
   "tagline": "在时间截止前找到 AI 机会",
-  "updated_at": "2026-08-28T04:43:29.197Z",
+  "updated_at": "2026-08-28T04:47:16.818Z",
   "source": "JS-banana/ai-opportunity-radar (airadar.laifuyou.com) + LucianaiB 飞书表「AI 活动推荐」双源合并",
   "activities": [
     {
@@ -6084,6 +6084,37 @@
       "discoveredAt": "2026-08-24T09:43:56.148Z",
       "slug": "activity-PJzMdI6BLBVus36J",
       "image": "path-prize-envelope.png"
+    },
+    {
+      "id": "dy-suining-mtcgztci",
+      "title": "绿洲海棠湾杯·我为绥宁写首歌 2026绥宁AI歌曲创作大赛",
+      "vendor": "绥宁绿洲·海棠湾（房地产冠名）",
+      "type": "内容创作",
+      "score": 3,
+      "difficulty": 1,
+      "difficultyNote": "零门槛，零基础也能用 AI 创作歌曲",
+      "reward": "专业音乐人组 + 素人创作组，零门槛，AI 演唱/编曲/MV，绥宁文化主题",
+      "rewardDetail": "赛程：报名/作品提交9/6-9/28 → 决赛入围9/29-10/5 → 决赛提交10/6-10/17 → 线上颁奖10/18 19:30 → 线下颁奖（待定）。参赛形式：歌词 + AI 演唱/编曲 + 制作 MV 或音频。 专业音乐人组 + 素人创作组，零门槛，AI 演唱/编曲/MV，绥宁文化主题",
+      "rewardTypes": [
+        "实物",
+        "证书"
+      ],
+      "format": "线上",
+      "participation": "电话联系 0739-7613999 报名；或线下到绥宁县城绥府路慢生活美食街展示中心、长城大酒店一楼大厅",
+      "winningCriteria": "",
+      "timelineNotes": "赛程：报名/作品提交9/6-9/28 → 决赛入围9/29-10/5 → 决赛提交10/6-10/17 → 线上颁奖10/18 19:30 → 线下颁奖（待定）。参赛形式：歌词 + AI 演唱/编曲 + 制作 MV 或音频。",
+      "startAt": "2026-09-06T00:00:00+08:00",
+      "endAt": "2026-09-28T23:59:59+08:00",
+      "deadline_date": "2026-09-28",
+      "region": "中国",
+      "officialStatus": "待确认",
+      "url": "https://v.douyin.com/6bTtxruLBac/",
+      "source": "抖音绥宁海棠湾",
+      "estimatedEffort": "歌词+AI演唱/编曲+MV制作",
+      "suggestion": "值得参加",
+      "discoveredAt": "2026-08-28T04:47:16.818Z",
+      "slug": "suining-aigc-song-2026",
+      "image": "path-submission-stage.png"
     }
   ]
 }

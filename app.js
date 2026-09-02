@@ -1,5 +1,5 @@
-const CUTOFF_MS = 7 * 86400000;
 const NOW = Date.now();
+const HIDE_AFTER_MS = 86400000; // 过期宽限：截止时刻已过超过 1 天即隐藏（原为 7 天）
 
 const state = { search:'', type:'all', region:'all', sort:'deadline' };
 let ALL = [];
@@ -20,24 +20,36 @@ const SUG_CLASS = {'立即行动':'act-now','值得参加':'worth-doing','先关
 function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function asset(img){ return 'assets/' + (img || 'path-prize-envelope.png'); }
 
-function parseDate(s){
-  if(!s) return null;
-  const m = s.match(/(\d{4})-(\d{2})-(\d{2})/);
-  if(!m) return null;
-  return new Date(+m[1], +m[2]-1, +m[3]);
-}
 function endOf(a){ return a.endAt || a.deadline_date; }
-function daysLeft(a){
+
+// —— 时间口径（2026-09-02 校准）——
+// 数据中截止时间多为带时区的精确时刻（如 2026-08-31T15:59:59.000Z = 北京 23:59:59）。
+// 旧实现用 Math.ceil(剩余毫秒/天)：当日 23:59 截止的活动会被多算 1 天 ——
+// 截止日当天显示"1 天截止"而非"今天截止"，几乎看不到"今天截止"就直接跳"已结束"。
+// 新口径（统一为本地日历日，与卡片"X月X日截止"文案一致）：
+//  1) deadlineTs()：截止精确时刻（尊重数据原文时区，毫秒级）；
+//  2) daysUntil() ：浏览者本地时区下「截止时刻所在日历日 − 今天」的自然日差；
+//     截止日整天 → 今天截止；一跨过截止时刻 → 已结束；
+//  3) 过期展示宽限 1 天：截止时刻已过超过 1 天 → 隐藏。
+function deadlineTs(a){
   const s = endOf(a); if(!s) return null;
-  const d = new Date(s); if(isNaN(d.getTime())) return null;
-  return Math.ceil((d.getTime() - NOW) / 86400000);
+  const t = new Date(s).getTime();
+  return Number.isNaN(t) ? null : t;
+}
+function localDay(ts){
+  const d = new Date(ts);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+}
+function daysUntil(a){
+  const t = deadlineTs(a); if(t == null) return null;
+  return Math.round((localDay(t) - localDay(NOW)) / 86400000);
 }
 function deadlineBadge(a){
-  const s = endOf(a);
-  if(!s) return '<span class="deadline-badge longterm">长期开放</span>';
-  const n = daysLeft(a);
+  const t = deadlineTs(a);
+  if(t == null) return '<span class="deadline-badge longterm">长期开放</span>';
+  const n = daysUntil(a);
   if(n === null) return '<span class="deadline-badge longterm">长期开放</span>';
-  if(n < 0) return '<span class="deadline-badge ended">已结束</span>';
+  if(NOW >= t) return '<span class="deadline-badge ended">已结束</span>'; // 已到截止精确时刻
   let cls, txt;
   if(n <= 7){ cls = 'urgent'; txt = n === 0 ? '今天截止' : n + ' 天截止'; }
   else if(n <= 30){ cls = 'soon'; txt = n + ' 天截止'; }
@@ -70,9 +82,9 @@ function matches(a){
   }
   if(state.type !== 'all' && a.type !== state.type) return false;
   if(state.region !== 'all' && a.region !== state.region) return false;
-  // 过期>7天不显示（按 endAt 精确时刻，动态随当前时间生效）
-  const s = endOf(a);
-  if(s){ const d = new Date(s); if(!isNaN(d.getTime()) && (NOW - d.getTime()) > CUTOFF_MS) return false; }
+  // 过期展示宽限 1 天：只保留 未截止 或 已结束≤1天 的活动（按截止精确时刻动态生效）
+  const t = deadlineTs(a);
+  if(t != null && NOW - t > HIDE_AFTER_MS) return false;
   return true;
 }
 function sortList(list){
@@ -80,11 +92,7 @@ function sortList(list){
   if(s === 'score') return list.sort((x,y)=> (y.score||0)-(x.score||0));
   if(s === 'reward') return list.sort((x,y)=> rewardVal(y)-rewardVal(x));
   if(s === 'newest') return list.sort((x,y)=> (y.discoveredAt||'').localeCompare(x.discoveredAt||''));
-  return list.sort((x,y)=>{
-    const dx = endOf(x)?new Date(endOf(x)).getTime():Infinity;
-    const dy = endOf(y)?new Date(endOf(y)).getTime():Infinity;
-    return dx - dy;
-  });
+  return list.sort((x,y)=> (deadlineTs(x) ?? Infinity) - (deadlineTs(y) ?? Infinity));
 }
 
 function fmtDate(a){

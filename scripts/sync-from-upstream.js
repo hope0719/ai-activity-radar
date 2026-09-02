@@ -225,7 +225,7 @@ function mergeActivities(jb, luc) {
 }
 
 function activeCount(list, now) {
-  const CUTOFF = 7 * 864e5;
+  const CUTOFF = 1 * 864e5; // 与前端一致：只保留未截止或已结束 ≤1 天的活动
   let n = 0;
   for (const x of list) {
     const s = x.endAt || x.deadline_date;

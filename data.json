@@ -1,7 +1,7 @@
 {
   "site_name": "AI 活动雷达",
   "tagline": "在时间截止前找到 AI 机会",
-  "updated_at": "2026-09-03T16:00:59.189Z",
+  "updated_at": "2026-09-05T16:01:15.168Z",
   "source": "JS-banana/ai-opportunity-radar (airadar.laifuyou.com) + LucianaiB 飞书表「AI 活动推荐」双源合并 + 手工补录 24 条",
   "activities": [
     {
@@ -5027,33 +5027,6 @@
       "slug": null
     },
     {
-      "id": "luc_recvplX7ItUpEN",
-      "title": "Production AI Skills 大赛",
-      "vendor": "ModelScope",
-      "type": "其他",
-      "score": 0,
-      "difficulty": null,
-      "difficultyNote": null,
-      "reward": "",
-      "rewardDetail": "会议录音到行动项，彻底释放 GPU 潜力：基于 Qoder + OpenVINO + CUDA 的本地办公 Agent Skill文章：[https://www.modelscope.cn/learn/434950](https://www.modelscope.cn/learn/434950)Skill：[https://www.modelscope.cn/skills/WEIAIb/meeting-action-copilot-skill](https://www.modelscope.cn/skills/WEIAIb/meeting-action-copilot-skill)",
-      "rewardTypes": [],
-      "format": null,
-      "participation": null,
-      "winningCriteria": null,
-      "timelineNotes": null,
-      "startAt": "2026-09-07T00:00:00.000+08:00",
-      "endAt": null,
-      "deadline_date": null,
-      "region": "其他",
-      "officialStatus": "",
-      "url": "https://modelscope.cn/events/289/Production%20AI%20Skills%20%E5%A4%A7%E8%B5%9B%E4%BB%8B%E7%BB%8D",
-      "source": "lucianaib",
-      "estimatedEffort": null,
-      "suggestion": "watch",
-      "discoveredAt": null,
-      "slug": null
-    },
-    {
       "id": "luc_recvqRZLXBuZPJ",
       "title": "仓颉开源社区学习赛",
       "vendor": "GitCode",
@@ -5122,7 +5095,7 @@
       "participation": null,
       "winningCriteria": null,
       "timelineNotes": null,
-      "startAt": "2026-09-04T00:00:00.000+08:00",
+      "startAt": "2026-09-09T00:00:00.000+08:00",
       "endAt": null,
       "deadline_date": null,
       "region": "其他",
